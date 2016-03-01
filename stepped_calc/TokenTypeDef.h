@@ -10,9 +10,10 @@
 enum struct Operator : int
 {
     Addition        = 0,
-    Subtraction     = 0,
-    Multiplication  = 1,
-    Division        = 1
+    Subtraction     = 1,
+
+    Multiplication  = 1000,
+    Division        = 1001
 };
 
 enum struct Parenthesis : int
