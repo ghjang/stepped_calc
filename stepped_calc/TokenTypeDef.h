@@ -17,10 +17,14 @@ enum struct Operator : int
 
 enum struct Parenthesis : int
 {
-    Round   = 0,
-    Curly   = 1,
-    Square  = 2,
-    Angle   = 3
+    RoundLeft   = 0,
+    RoundRight  = 1,
+    CurlyLeft   = 2,
+    CurlyRight  = 3,
+    SquareLeft  = 4,
+    SquareRight = 5,
+    AngleLeft   = 6,
+    AngleRight  = 7
 };
 
 
