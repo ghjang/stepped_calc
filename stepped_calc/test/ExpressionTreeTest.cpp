@@ -15,7 +15,7 @@ TEST_CASE("evaluate_expression_tree", "[stepped_calc]")
     };
 
     operand_t result = evaluate_expression_tree(make_expression_tree(postfixNotationTokens));
-    operand_t expected_result = 7;
-    REQUIRE(result == expected_result);
+    operand_t expectedResult = 7;
+    REQUIRE(result == expectedResult);
 }
 
