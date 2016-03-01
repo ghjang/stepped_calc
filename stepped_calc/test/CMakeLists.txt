@@ -12,14 +12,17 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 set(SOURCE_FILES
-        main.cpp
-        TokenizerTest.cpp
-        InfixToPostfixTest.cpp
         ../TokenTypeDef.h
         ../Tokenizer.h
         ../Tokenizer.cpp
         ../InfixToPostfix.h
-        ../InfixToPostfix.cpp)
+        ../InfixToPostfix.cpp
+        ../ExpressionTree.h
+        ../ExpressionTree.cpp
+        main.cpp
+        TokenizerTest.cpp
+        InfixToPostfixTest.cpp
+        ExpressionTreeTest.cpp)
 
 add_executable(SteppedCalcTest ${SOURCE_FILES})
 
