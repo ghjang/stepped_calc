@@ -1,10 +1,10 @@
 #include "InfixToPostfix.h"
 
 
-std::vector<token_t>
-infix_to_postfix(std::string const& expr)
+token_list_t
+infix_to_postfix(token_list_t const& tokens)
 {
-    std::vector<token_t> tv;
-    return tv;
+    token_list_t tl;
+    return tl;
 }
 

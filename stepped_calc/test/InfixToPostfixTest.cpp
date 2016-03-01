@@ -17,7 +17,11 @@ TEST_CASE("operator precedence", "[stepped_calc]")
 
 TEST_CASE("infix notation to postfix notation", "[stepped_calc]")
 {
-    auto n = infix_to_postfix("1+2*3");
+    token_list_t tokens{
+            operand_t{ 1 }, Operator::Addition, operand_t{ 2 }, Operator::Multiplication, operand_t{ 3 } // "1+2*3"
+    };
+
+    auto n = infix_to_postfix(tokens);
     REQUIRE(n.size() == 5);
 
     bool cr1 = (n[0] == token_t{ operand_t{ 1 } });

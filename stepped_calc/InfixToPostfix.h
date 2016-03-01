@@ -7,7 +7,10 @@
 #include <vector>
 
 
-std::vector<token_t> infix_to_postfix(std::string const& expr);
+using token_list_t = std::vector<token_t>;
+
+
+token_list_t infix_to_postfix(token_list_t const& tokens);
 
 
 #endif //STEPPEDCALC_INFIXTOPOSTFIX_H
