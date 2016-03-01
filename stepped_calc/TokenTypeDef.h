@@ -3,6 +3,7 @@
 
 
 #include <string>
+#include <vector>
 #include "boost/variant.hpp"
 
 
@@ -14,10 +15,20 @@ enum struct Operator : int
     Division        = 1
 };
 
+enum struct Parenthesis : int
+{
+    Rount   = 0,
+    Curly   = 1,
+    Square  = 2,
+    Angle   = 3
+};
+
 
 using operand_t = boost::variant<int, double>;
 
-using token_t = boost::variant<Operator, operand_t>;
+using token_t = boost::variant<Operator, Parenthesis, operand_t>;
+
+using token_list_t = std::vector<token_t>;
 
 
 #endif //STEPPEDCALC_TOKENTYPEDEF_H
