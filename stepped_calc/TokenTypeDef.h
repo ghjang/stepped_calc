@@ -17,7 +17,7 @@ enum struct Operator : int
 
 enum struct Parenthesis : int
 {
-    Rount   = 0,
+    Round   = 0,
     Curly   = 1,
     Square  = 2,
     Angle   = 3
