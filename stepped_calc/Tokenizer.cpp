@@ -29,8 +29,8 @@ namespace
         return s;
     }
 
-    Operator
-    to_operator(char c)
+    token_t
+    to_token(char c)
     {
         switch (c) {
             case '+': return Operator::Addition;
@@ -64,7 +64,7 @@ tokenize(std::string const& expr)
     while (exprPos != exprEnd) {
         strToken = take_while(exprPos, exprEnd, [](char c) { return !is_operator_char(c); });
         if (strToken.empty()) { // if operator or parenthesis,
-            tokens.push_back(to_operator(*exprPos));
+            tokens.push_back(to_token(*exprPos));
             ++exprPos;
         } else {
             tokens.push_back(to_operand(strToken));
