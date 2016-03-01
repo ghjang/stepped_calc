@@ -15,6 +15,8 @@ set(SOURCE_FILES
         ../TokenTypeDef.h
         ../Tokenizer.h
         ../Tokenizer.cpp
+        ../OperatorPrecedence.h
+        ../OperatorPrecedence.cpp
         ../InfixToPostfix.h
         ../InfixToPostfix.cpp
         ../ExpressionTree.h
@@ -22,7 +24,8 @@ set(SOURCE_FILES
         main.cpp
         TokenizerTest.cpp
         InfixToPostfixTest.cpp
-        ExpressionTreeTest.cpp)
+        ExpressionTreeTest.cpp
+        OperatorPrecedenceTest.cpp)
 
 add_executable(SteppedCalcTest ${SOURCE_FILES})
 
