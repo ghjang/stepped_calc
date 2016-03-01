@@ -15,27 +15,9 @@ enum struct Operator : int
 };
 
 
-enum struct ValueType : int
-{
-    Integer = 0
-};
+using operand_t = boost::variant<int, double>;
 
-
-struct Operand
-{
-    ValueType vt_;
-    std::string expr_;
-};
-
-
-using token_t = boost::variant<Operand, Operator>;
-
-
-inline bool operator == (Operand const& lhs, Operand const& rhs)
-{ return lhs.vt_ == rhs.vt_ && lhs.expr_ == rhs.expr_; }
-
-inline bool operator != (Operand const& lhs, Operand const& rhs)
-{ return !(lhs == rhs); }
+using token_t = boost::variant<Operator, operand_t>;
 
 
 #endif //STEPPEDCALC_TOKENTYPEDEF_H
