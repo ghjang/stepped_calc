@@ -21,11 +21,16 @@ set(SOURCE_FILES
         ../InfixToPostfix.cpp
         ../ExpressionTree.h
         ../ExpressionTree.cpp
+        ../Calculator.h
+        ../Calculator.cpp
+        ../SteppedCalculator.h
+        ../SteppedCalculator.cpp
         main.cpp
         TokenizerTest.cpp
         InfixToPostfixTest.cpp
         ExpressionTreeTest.cpp
-        OperatorPrecedenceTest.cpp)
+        OperatorPrecedenceTest.cpp
+        CalculatorTest.cpp)
 
 add_executable(SteppedCalcTest ${SOURCE_FILES})
 
