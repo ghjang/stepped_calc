@@ -3,18 +3,6 @@
 #include "../InfixToPostfix.h"
 
 
-TEST_CASE("operator precedence", "[stepped_calc]")
-{
-    static_assert(Operator::Addition == Operator::Addition, "");
-    static_assert(Operator::Addition == Operator::Subtraction, "");
-
-    static_assert(Operator::Multiplication == Operator::Multiplication, "");
-    static_assert(Operator::Multiplication == Operator::Division, "");
-
-    static_assert(Operator::Addition < Operator::Multiplication, "");
-    static_assert(Operator::Addition < Operator::Division, "");
-}
-
 TEST_CASE("infix notation to postfix notation", "[stepped_calc]")
 {
     token_list_t tokens{
