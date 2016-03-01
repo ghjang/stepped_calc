@@ -28,7 +28,8 @@ ExpressionTreePtr
 make_expression_tree(token_list_t const& postfixNotationTokens);
 
 operand_t
-evaluate_expression_tree(ExpressionTreePtr ptrTree);
+evaluate(ExpressionTreePtr ptrTree);
+
 
 
 #endif //STEPPEDCALC_EXPRESSIONTREE_H

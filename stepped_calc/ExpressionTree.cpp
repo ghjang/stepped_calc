@@ -36,7 +36,7 @@ namespace
     };
 
     operand_t
-    evaluate_expression_tree_impl(ExpressionTreePtr ptrTree)
+    evaluate_impl(ExpressionTreePtr ptrTree)
     {
         if (!(ptrTree->ptrLeftChild_) && !(ptrTree->ptrRightChild_)) {
             if (operand_t * pOperand = boost::get<operand_t>(&(ptrTree->item_))) {
@@ -50,8 +50,8 @@ namespace
             // NOTE: if it reaches here, something went wrong.
         }
 
-        operand_t lhsOperand = evaluate_expression_tree(ptrTree->ptrLeftChild_);
-        operand_t rhsOperand = evaluate_expression_tree(ptrTree->ptrRightChild_);
+        operand_t lhsOperand = evaluate_impl(ptrTree->ptrLeftChild_);
+        operand_t rhsOperand = evaluate_impl(ptrTree->ptrRightChild_);
 
         return boost::apply_visitor(DoBinaryOperation(*pOperator), lhsOperand, rhsOperand);
     }
@@ -81,13 +81,13 @@ make_expression_tree(token_list_t const& postfixNotationTokens)
 }
 
 operand_t
-evaluate_expression_tree(ExpressionTreePtr ptrTree)
+evaluate(ExpressionTreePtr ptrTree)
 {
     assert(ptrTree);
     if (!ptrTree) {
         throw std::invalid_argument("null expression tree was passed.");
     }
 
-    return evaluate_expression_tree_impl(ptrTree);
+    return evaluate_impl(ptrTree);
 }
 
