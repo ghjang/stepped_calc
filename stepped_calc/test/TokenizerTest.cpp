@@ -2,6 +2,53 @@
 
 #include "../Tokenizer.h"
 
+#include <regex>
+
+
+TEST_CASE("regex_match, digit sequence", "[stepped_calc]")
+{
+    {
+        std::string s = "10";
+        std::regex expr(R"(\d\d)");
+        REQUIRE(std::regex_match(s.begin(), s.end(), expr));
+    }
+
+    {
+        std::string s = "10";
+        std::regex expr(R"(\d{1,2}|\d\.|\.\d)");
+        REQUIRE(std::regex_match(s.begin(), s.end(), expr));
+    }
+
+    {
+        std::string s = "1.";
+        std::regex expr(R"(\d\.)");
+        REQUIRE(std::regex_match(s.begin(), s.end(), expr));
+    }
+
+    {
+        // NOTE: this seems to be a bug of clang??
+
+        std::string s = "1.";
+
+        std::regex expr(R"(\d{1,2}|\d\.|\.\d)");
+        REQUIRE(!std::regex_match(s.begin(), s.end(), expr));
+
+        std::regex expr1(R"(\d\.|\.\d)");
+        REQUIRE(std::regex_match(s.begin(), s.end(), expr1));
+
+        std::regex expr2(R"(\.\d|\d\.)");
+        REQUIRE(std::regex_match(s.begin(), s.end(), expr2));
+
+        std::regex expr3(R"(\d\.|\.\d|\d{1,2})");
+        REQUIRE(std::regex_match(s.begin(), s.end(), expr3));
+    }
+
+    {
+        std::string s = ".1";
+        std::regex expr(R"(\d{1,2}|\d\.|\.\d)");
+        REQUIRE(std::regex_match(s.begin(), s.end(), expr));
+    }
+}
 
 TEST_CASE("tokenize", "[stepped_calc]")
 {
