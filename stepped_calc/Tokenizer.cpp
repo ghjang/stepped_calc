@@ -1,5 +1,7 @@
 #include "Tokenizer.h"
 
+#include <regex>
+
 
 namespace
 {
@@ -18,9 +20,23 @@ namespace
         }
     }
 
+    bool
+    is_digit_sequence(char prev, char c)
+    {
+        std::regex expr(R"(\d\.|\.\d|\d{1,2})");
+        std::string s;
+        if ('\0' != prev) {
+            s += prev;
+        }
+        s += c;
+        return std::regex_match(s.begin(), s.end(), expr);
+    }
+
     template <typename Predicate>
     std::string
-    take_while(std::string::const_iterator & begin, std::string::const_iterator end, Predicate && p)
+    take_while(std::string::const_iterator & begin,
+               std::string::const_iterator end,
+               Predicate && p)
     {
         std::string s;
         for ( ; begin != end && p(*begin); ++begin) {
@@ -47,6 +63,9 @@ namespace
     constant_t
     to_constant(std::string const& s)
     {
+        if (s.find_first_of('.') != std::string::npos) {
+            std::stod(s);
+        }
         return std::stoi(s);
     }
 } // un-named namespace
@@ -62,7 +81,14 @@ tokenize(std::string const& expr)
     std::string strToken;
 
     while (exprPos != exprEnd) {
-        strToken = take_while(exprPos, exprEnd, [](char c) { return !is_operator_char(c); });
+        strToken = take_while(
+                           exprPos, exprEnd,
+                           [prevChar = '\0'](char c) mutable {
+                                    bool result = is_digit_sequence(prevChar, c);
+                                    prevChar = c;
+                                    return result;
+                            }
+                    );
         if (strToken.empty()) { // if not constant
             tokens.push_back(to_token(*exprPos));
             ++exprPos;
