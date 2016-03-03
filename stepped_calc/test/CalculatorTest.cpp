@@ -34,5 +34,11 @@ TEST_CASE("calculate", "[stepped_cals]")
         constant_t expectedResult{ -10 };
         REQUIRE(result == expectedResult);
     }
+
+    {
+        constant_t result = calculate("1*2*345+4-2*10");
+        constant_t expectedResult{ 674 };
+        REQUIRE(result == expectedResult);
+    }
 }
 
