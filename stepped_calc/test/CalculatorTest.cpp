@@ -6,32 +6,32 @@
 TEST_CASE("calculate", "[stepped_cals]")
 {
     {
-        operand_t result = calculate("1+2*3");
-        operand_t expectedResult{ 7 };
+        constant_t result = calculate("1+2*3");
+        constant_t expectedResult{ 7 };
         REQUIRE(result == expectedResult);
     }
 
     {
-        operand_t result = calculate("1*2+3");
-        operand_t expectedResult{ 5 };
+        constant_t result = calculate("1*2+3");
+        constant_t expectedResult{ 5 };
         REQUIRE(result == expectedResult);
     }
 
     {
-        operand_t result = calculate("1*2*3");
-        operand_t expectedResult{ 6 };
+        constant_t result = calculate("1*2*3");
+        constant_t expectedResult{ 6 };
         REQUIRE(result == expectedResult);
     }
 
     {
-        operand_t result = calculate("1*2*3+4-2");
-        operand_t expectedResult{ 8 };
+        constant_t result = calculate("1*2*3+4-2");
+        constant_t expectedResult{ 8 };
         REQUIRE(result == expectedResult);
     }
 
     {
-        operand_t result = calculate("1*2*3+4-2*10");
-        operand_t expectedResult{ -10 };
+        constant_t result = calculate("1*2*3+4-2*10");
+        constant_t expectedResult{ -10 };
         REQUIRE(result == expectedResult);
     }
 }

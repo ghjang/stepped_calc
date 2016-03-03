@@ -29,9 +29,9 @@ enum struct Parenthesis : int
 };
 
 
-using operand_t = boost::variant<int, double>;
+using constant_t = boost::variant<int, double>;
 
-using token_t = boost::variant<Operator, Parenthesis, operand_t>;
+using token_t = boost::variant<Operator, Parenthesis, constant_t>;
 
 using token_list_t = std::vector<token_t>;
 

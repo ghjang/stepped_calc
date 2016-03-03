@@ -5,7 +5,7 @@
 #include "TokenTypeDef.h"
 
 
-operand_t calculate(std::string const& expr);
+constant_t calculate(std::string const& expr);
 
 
 #endif //STEPPEDCALC_CALCULATOR_H

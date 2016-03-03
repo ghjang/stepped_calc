@@ -5,7 +5,7 @@
 
 namespace
 {
-    class DoBinaryOperation : boost::static_visitor<operand_t>
+    class DoBinaryOperation : boost::static_visitor<constant_t>
     {
     public:
         DoBinaryOperation(Operator op)
@@ -13,7 +13,7 @@ namespace
         { }
 
         template <typename T1, typename T2>
-        operand_t operator () (T1 & lhs, T2 & rhs) const
+        constant_t operator () (T1 & lhs, T2 & rhs) const
         {
             switch (operator_) {
                 case Operator::Addition:
@@ -35,12 +35,12 @@ namespace
         Operator operator_;
     };
 
-    operand_t
+    constant_t
     evaluate_impl(ExpressionTreePtr ptrTree)
     {
         if (!(ptrTree->ptrLeftChild_) && !(ptrTree->ptrRightChild_)) {
-            if (operand_t * pOperand = boost::get<operand_t>(&(ptrTree->item_))) {
-                return *pOperand;
+            if (constant_t * pConstant = boost::get<constant_t>(&(ptrTree->item_))) {
+                return *pConstant;
             }
             // NOTE: if it reaches here, something went wrong.
         }
@@ -50,8 +50,8 @@ namespace
             // NOTE: if it reaches here, something went wrong.
         }
 
-        operand_t lhsOperand = evaluate_impl(ptrTree->ptrLeftChild_);
-        operand_t rhsOperand = evaluate_impl(ptrTree->ptrRightChild_);
+        constant_t lhsOperand = evaluate_impl(ptrTree->ptrLeftChild_);
+        constant_t rhsOperand = evaluate_impl(ptrTree->ptrRightChild_);
 
         return boost::apply_visitor(DoBinaryOperation(*pOperator), lhsOperand, rhsOperand);
     }
@@ -64,8 +64,8 @@ make_expression_tree(token_list_t const& postfixNotationTokens)
     std::stack<ExpressionTreePtr> etStack;
 
     for (auto const& t : postfixNotationTokens) {
-        if (operand_t const * pOperand = boost::get<operand_t>(&t)) {
-            ExpressionTreePtr ptrTerminal = std::make_shared<ExpressionTree>(*pOperand);
+        if (constant_t const * pConstant = boost::get<constant_t>(&t)) {
+            ExpressionTreePtr ptrTerminal = std::make_shared<ExpressionTree>(*pConstant);
             etStack.push(ptrTerminal);
         } else if (Operator const * pOperator = boost::get<Operator>(&t)) {
             ExpressionTreePtr ptrNonTerminal = std::make_shared<ExpressionTree>(*pOperator);
@@ -80,7 +80,7 @@ make_expression_tree(token_list_t const& postfixNotationTokens)
     return etStack.top();
 }
 
-operand_t
+constant_t
 evaluate(ExpressionTreePtr ptrTree)
 {
     assert(ptrTree);

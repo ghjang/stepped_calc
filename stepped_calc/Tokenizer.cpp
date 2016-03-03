@@ -44,8 +44,8 @@ namespace
         throw std::invalid_argument("invalid operator char.");
     }
 
-    operand_t
-    to_operand(std::string const& s)
+    constant_t
+    to_constant(std::string const& s)
     {
         return std::stoi(s);
     }
@@ -63,11 +63,11 @@ tokenize(std::string const& expr)
 
     while (exprPos != exprEnd) {
         strToken = take_while(exprPos, exprEnd, [](char c) { return !is_operator_char(c); });
-        if (strToken.empty()) { // if operator or parenthesis,
+        if (strToken.empty()) { // if not constant
             tokens.push_back(to_token(*exprPos));
             ++exprPos;
         } else {
-            tokens.push_back(to_operand(strToken));
+            tokens.push_back(to_constant(strToken));
         }
     }
 

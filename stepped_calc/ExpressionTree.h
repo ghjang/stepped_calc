@@ -27,9 +27,17 @@ struct ExpressionTree
 ExpressionTreePtr
 make_expression_tree(token_list_t const& postfixNotationTokens);
 
-operand_t
+constant_t
 evaluate(ExpressionTreePtr ptrTree);
 
+/**
+ * THINK: how to implement this and the interfaces
+void
+evaluate_first_terminal(ExpressionTreePtr ptrTree);
+
+ExpressionTreePtr <- last evaluated one?
+evaluate_first_terminal(ExpressionTreePtr ptrTree);
+ */
 
 
 #endif //STEPPEDCALC_EXPRESSIONTREE_H
