@@ -41,6 +41,12 @@ TEST_CASE("regex_match, digit sequence", "[stepped_calc]")
 
         std::regex expr3(R"(\d\.|\.\d|\d{1,2})");
         REQUIRE(std::regex_match(s.begin(), s.end(), expr3));
+
+        s = "10";
+        REQUIRE(std::regex_match(s.begin(), s.end(), expr3));
+        
+        s = ".1";
+        REQUIRE(std::regex_match(s.begin(), s.end(), expr3));
     }
 
     {
