@@ -8,7 +8,7 @@ namespace
     class DoBinaryOperation : boost::static_visitor<constant_t>
     {
     public:
-        DoBinaryOperation(Operator op)
+        DoBinaryOperation(BinaryOperator op)
                 : operator_(op)
         { }
 
@@ -16,13 +16,13 @@ namespace
         constant_t operator () (T1 & lhs, T2 & rhs) const
         {
             switch (operator_) {
-                case Operator::Addition:
+                case BinaryOperator::Addition:
                     return lhs + rhs;
-                case Operator::Subtraction:
+                case BinaryOperator::Subtraction:
                     return lhs - rhs;
-                case Operator::Multiplication:
+                case BinaryOperator::Multiplication:
                     return lhs * rhs;
-                case Operator::Division:
+                case BinaryOperator::Division:
                     return lhs / rhs;
 
                 default:
@@ -32,7 +32,7 @@ namespace
         }
 
     private:
-        Operator operator_;
+        BinaryOperator operator_;
     };
 
     constant_t
@@ -45,7 +45,7 @@ namespace
             // NOTE: if it reaches here, something went wrong.
         }
 
-        Operator * pOperator = boost::get<Operator>(&(ptrTree->item_));
+        BinaryOperator * pOperator = boost::get<BinaryOperator>(&(ptrTree->item_));
         if (!pOperator) {
             // NOTE: if it reaches here, something went wrong.
         }
@@ -67,7 +67,7 @@ make_expression_tree(token_list_t const& postfixNotationTokens)
         if (constant_t const * pConstant = boost::get<constant_t>(&t)) {
             ExpressionTreePtr ptrTerminal = std::make_shared<ExpressionTree>(*pConstant);
             etStack.push(ptrTerminal);
-        } else if (Operator const * pOperator = boost::get<Operator>(&t)) {
+        } else if (BinaryOperator const * pOperator = boost::get<BinaryOperator>(&t)) {
             ExpressionTreePtr ptrNonTerminal = std::make_shared<ExpressionTree>(*pOperator);
             ptrNonTerminal->ptrRightChild_ = etStack.top();
             etStack.pop();

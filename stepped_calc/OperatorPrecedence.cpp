@@ -3,7 +3,7 @@
 #include <cstdlib>
 
 
-int compare_precedence(Operator lhs, Operator rhs)
+int compare_precedence(BinaryOperator lhs, BinaryOperator rhs)
 {
     int diff = static_cast<int>(lhs) - static_cast<int>(rhs);
     if (std::abs(diff) < 500) {

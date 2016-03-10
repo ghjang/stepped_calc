@@ -5,8 +5,9 @@
 
 TEST_CASE("infix notation to postfix notation", "[stepped_calc]")
 {
+    // "1+2*3"
     token_list_t tokens{
-            constant_t{ 1 }, Operator::Addition, constant_t{ 2 }, Operator::Multiplication, constant_t{ 3 } // "1+2*3"
+            constant_t{ 1 }, BinaryOperator::Addition, constant_t{ 2 }, BinaryOperator::Multiplication, constant_t{ 3 }
     };
 
     auto n = infix_to_postfix(tokens);
@@ -15,8 +16,8 @@ TEST_CASE("infix notation to postfix notation", "[stepped_calc]")
     bool cr1 = (n[0] == token_t{ constant_t{ 1 } });
     bool cr2 = (n[1] == token_t{ constant_t{ 2 } });
     bool cr3 = (n[2] == token_t{ constant_t{ 3 } });
-    bool cr4 = (n[3] == token_t{ Operator::Multiplication });
-    bool cr5 = (n[4] == token_t{ Operator::Addition });
+    bool cr4 = (n[3] == token_t{ BinaryOperator::Multiplication });
+    bool cr5 = (n[4] == token_t{ BinaryOperator::Addition });
     REQUIRE(cr1);
     REQUIRE(cr2);
     REQUIRE(cr3);

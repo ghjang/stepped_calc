@@ -3,18 +3,18 @@
 #include "../OperatorPrecedence.h"
 
 
-TEST_CASE("operator precedence", "[stepped_calc]")
+TEST_CASE("binary operator precedence", "[stepped_calc]")
 {
-    REQUIRE(0 == compare_precedence(Operator::Addition, Operator::Addition));
-    REQUIRE(0 == compare_precedence(Operator::Addition, Operator::Subtraction));
+    REQUIRE(0 == compare_precedence(BinaryOperator::Addition, BinaryOperator::Addition));
+    REQUIRE(0 == compare_precedence(BinaryOperator::Addition, BinaryOperator::Subtraction));
 
-    REQUIRE(0 == compare_precedence(Operator::Multiplication, Operator::Multiplication));
-    REQUIRE(0 == compare_precedence(Operator::Multiplication, Operator::Division));
+    REQUIRE(0 == compare_precedence(BinaryOperator::Multiplication, BinaryOperator::Multiplication));
+    REQUIRE(0 == compare_precedence(BinaryOperator::Multiplication, BinaryOperator::Division));
 
-    REQUIRE(1 == compare_precedence(Operator::Addition, Operator::Multiplication));
-    REQUIRE(1 == compare_precedence(Operator::Addition, Operator::Division));
+    REQUIRE(1 == compare_precedence(BinaryOperator::Addition, BinaryOperator::Multiplication));
+    REQUIRE(1 == compare_precedence(BinaryOperator::Addition, BinaryOperator::Division));
 
-    REQUIRE(-1 == compare_precedence(Operator::Multiplication, Operator::Addition));
-    REQUIRE(-1 == compare_precedence(Operator::Division, Operator::Addition));
+    REQUIRE(-1 == compare_precedence(BinaryOperator::Multiplication, BinaryOperator::Addition));
+    REQUIRE(-1 == compare_precedence(BinaryOperator::Division, BinaryOperator::Addition));
 }
 

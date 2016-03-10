@@ -5,7 +5,7 @@
 #include "TokenTypeDef.h"
 
 
-int compare_precedence(Operator lhs, Operator rhs);
+int compare_precedence(BinaryOperator lhs, BinaryOperator rhs);
 
 
 #endif //STEPPEDCALC_OPERATORPRECEDENCE_H

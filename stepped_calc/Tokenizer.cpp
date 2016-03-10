@@ -49,10 +49,10 @@ namespace
     to_token(char c)
     {
         switch (c) {
-            case '+': return Operator::Addition;
-            case '-': return Operator::Subtraction;
-            case '*': return Operator::Multiplication;
-            case '/': return Operator::Division;
+            case '+': return BinaryOperator::Addition;
+            case '-': return BinaryOperator::Subtraction;
+            case '*': return BinaryOperator::Multiplication;
+            case '/': return BinaryOperator::Division;
 
             default:
                 break;
