@@ -19,8 +19,45 @@ namespace
         }
     };
 
+    struct IsLeftParenthesisToken : boost::static_visitor<bool>
+    {
+        template <typename T>
+        bool operator () (T) const
+        {
+            return false;
+        }
+
+        bool operator () (Parenthesis paren) const
+        {
+            switch (paren) {
+                case Parenthesis::RoundLeft:
+                case Parenthesis::CurlyLeft:
+                case Parenthesis::SquareLeft:
+                case Parenthesis::AngleLeft:
+                    return true;
+
+                default:
+                    break;
+            }
+            return false;
+        }
+    };
+
     bool
-    is_operator_char(char c)
+    is_unary_operator_char(char c)
+    {
+        switch (c) {
+            case '+':
+            case '-':
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    bool
+    is_binary_operator_char(char c)
     {
         switch (c) {
             case '+':
@@ -32,6 +69,44 @@ namespace
             default:
                 return false;
         }
+    }
+
+    bool
+    is_parenthesis_char(char c)
+    {
+        switch (c) {
+            case '(':
+            case ')':
+            case '{':
+            case '}':
+            case '[':
+            case ']':
+            case '<':
+            case '>':
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    Parenthesis
+    to_nonterminal_parenthesis_token(char c)
+    {
+        switch (c) {
+            case '(': return Parenthesis::RoundLeft;
+            case ')': return Parenthesis::RoundRight;
+            case '{': return Parenthesis::CurlyLeft;
+            case '}': return Parenthesis::CurlyRight;
+            case '[': return Parenthesis::SquareLeft;
+            case ']': return Parenthesis::SquareRight;
+            case '<': return Parenthesis::AngleLeft;
+            case '>': return Parenthesis::AngleRight;
+
+            default:
+                break;
+        }
+        throw std::invalid_argument("invalid parenthesis char");
     }
 
     bool
@@ -59,7 +134,20 @@ namespace
         return s;
     }
 
-    token_t
+    UnaryOperator
+    to_nonterminal_unary_operator_token(char c)
+    {
+        switch (c) {
+            case '+': return UnaryOperator::Plus;
+            case '-': return UnaryOperator::Minus;
+
+            default:
+                break;
+        }
+        throw std::invalid_argument("invalid unary operator char.");
+    }
+
+    BinaryOperator
     to_nonterminal_binary_operator_token(char c)
     {
         switch (c) {
@@ -71,7 +159,34 @@ namespace
             default:
                 break;
         }
-        throw std::invalid_argument("invalid operator char.");
+        throw std::invalid_argument("invalid binary operator char.");
+    }
+
+    token_t
+    to_nonterminal_token(char c)
+    {
+        if (is_parenthesis_char(c)) {
+            return to_nonterminal_parenthesis_token(c);
+        }
+        if (is_unary_operator_char(c)) {
+            return to_nonterminal_unary_operator_token(c);
+        }
+        throw std::invalid_argument("invalid first char");
+    }
+
+    token_t
+    to_nonterminal_token(token_t const& prevToken, char c)
+    {
+        if (is_parenthesis_char(c)) {
+            return to_nonterminal_parenthesis_token(c);
+        }
+        if (boost::apply_visitor(IsLeftParenthesisToken(), prevToken)) {
+            return to_nonterminal_unary_operator_token(c);
+        }
+        if (BinaryOperator const * pOp = boost::get<BinaryOperator>(&prevToken)) {
+            return to_nonterminal_unary_operator_token(c);
+        }
+        return to_nonterminal_binary_operator_token(c);
     }
 
     constant_t
@@ -108,7 +223,11 @@ tokenize(std::string const& expr)
                 ++exprPos;
                 continue;
             }
-            tokens.push_back(to_nonterminal_binary_operator_token(*exprPos));
+            if (tokens.empty()) { // if first token,
+                tokens.push_back(to_nonterminal_token(*exprPos));
+            } else {
+                tokens.push_back(to_nonterminal_token(tokens.back(), *exprPos));
+            }
             ++exprPos;
         } else {
             if (!tokens.empty() && boost::apply_visitor(IsTerminalConstant(), tokens.back())) {

@@ -8,6 +8,12 @@
 #include <boost/variant.hpp>
 
 
+enum struct UnaryOperator : int
+{
+    Plus    = 0,
+    Minus   = 1
+};
+
 enum struct BinaryOperator : int
 {
     Addition        = 0,
@@ -32,7 +38,7 @@ enum struct Parenthesis : int
 
 using constant_t = boost::variant<int, double>;
 
-using token_t = boost::variant<BinaryOperator, Parenthesis, constant_t>;
+using token_t = boost::variant<UnaryOperator, BinaryOperator, Parenthesis, constant_t>;
 
 using token_list_t = std::vector<token_t>;
 
