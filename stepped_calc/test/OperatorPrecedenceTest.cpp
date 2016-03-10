@@ -5,16 +5,21 @@
 
 TEST_CASE("binary operator precedence", "[stepped_calc]")
 {
-    REQUIRE(0 == compare_precedence(BinaryOperator::Addition, BinaryOperator::Addition));
-    REQUIRE(0 == compare_precedence(BinaryOperator::Addition, BinaryOperator::Subtraction));
+    auto const addition = token_t{ BinaryOperator::Addition };
+    auto const subtraction = token_t{ BinaryOperator::Subtraction };
+    auto const multiplication = token_t{ BinaryOperator::Multiplication };
+    auto const division = token_t{ BinaryOperator::Division };
 
-    REQUIRE(0 == compare_precedence(BinaryOperator::Multiplication, BinaryOperator::Multiplication));
-    REQUIRE(0 == compare_precedence(BinaryOperator::Multiplication, BinaryOperator::Division));
+    REQUIRE(0 == boost::apply_visitor(CompareOperatorPrecedence(), addition, addition));
+    REQUIRE(0 == boost::apply_visitor(CompareOperatorPrecedence(), addition, subtraction));
 
-    REQUIRE(1 == compare_precedence(BinaryOperator::Addition, BinaryOperator::Multiplication));
-    REQUIRE(1 == compare_precedence(BinaryOperator::Addition, BinaryOperator::Division));
+    REQUIRE(0 == boost::apply_visitor(CompareOperatorPrecedence(), multiplication, multiplication));
+    REQUIRE(0 == boost::apply_visitor(CompareOperatorPrecedence(), multiplication, division));
 
-    REQUIRE(-1 == compare_precedence(BinaryOperator::Multiplication, BinaryOperator::Addition));
-    REQUIRE(-1 == compare_precedence(BinaryOperator::Division, BinaryOperator::Addition));
+    REQUIRE(1 == boost::apply_visitor(CompareOperatorPrecedence(), addition, multiplication));
+    REQUIRE(1 == boost::apply_visitor(CompareOperatorPrecedence(), addition, division));
+
+    REQUIRE(-1 == boost::apply_visitor(CompareOperatorPrecedence(), multiplication, addition));
+    REQUIRE(-1 == boost::apply_visitor(CompareOperatorPrecedence(), division, addition));
 }
 

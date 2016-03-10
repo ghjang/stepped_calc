@@ -9,15 +9,16 @@ infix_to_postfix(token_list_t const& tokens)
 {
     token_list_t tl;
 
-    std::stack<BinaryOperator> opStack;
+    std::stack<token_t> opStack;
 
     for (auto & t : tokens) {
-        if (BinaryOperator const * pOp = boost::get<BinaryOperator>(&t)) {
-            while (!opStack.empty() && compare_precedence(*pOp, opStack.top()) >= 0) {
+        if (boost::apply_visitor(IsOperatorToken(), t)) {
+            while (!opStack.empty()
+                        && boost::apply_visitor(CompareOperatorPrecedence(), t, opStack.top()) >= 0) {
                 tl.push_back(opStack.top());
                 opStack.pop();
             }
-            opStack.push(*pOp);
+            opStack.push(t);
             continue;
         }
         tl.push_back(t);
