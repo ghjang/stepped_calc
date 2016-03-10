@@ -46,7 +46,7 @@ namespace
     }
 
     token_t
-    to_token(char c)
+    to_nonterminal_token(char c)
     {
         switch (c) {
             case '+': return BinaryOperator::Addition;
@@ -61,7 +61,7 @@ namespace
     }
 
     constant_t
-    to_constant(std::string const& s)
+    to_terminal_constant(std::string const& s)
     {
         if (s.find_first_of('.') != std::string::npos) {
             std::stod(s);
@@ -90,10 +90,10 @@ tokenize(std::string const& expr)
                             }
                     );
         if (strToken.empty()) { // if not constant
-            tokens.push_back(to_token(*exprPos));
+            tokens.push_back(to_nonterminal_token(*exprPos));
             ++exprPos;
         } else {
-            tokens.push_back(to_constant(strToken));
+            tokens.push_back(to_terminal_constant(strToken));
         }
     }
 
