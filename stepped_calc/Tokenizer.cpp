@@ -5,6 +5,20 @@
 
 namespace
 {
+    struct IsTerminalConstant : boost::static_visitor<bool>
+    {
+        template <typename T>
+        bool operator () (T) const
+        {
+            return false;
+        }
+
+        bool operator () (constant_t const&) const
+        {
+            return true;
+        }
+    };
+
     bool
     is_operator_char(char c)
     {
@@ -46,7 +60,7 @@ namespace
     }
 
     token_t
-    to_nonterminal_token(char c)
+    to_nonterminal_binary_operator_token(char c)
     {
         switch (c) {
             case '+': return BinaryOperator::Addition;
@@ -89,10 +103,17 @@ tokenize(std::string const& expr)
                                     return result;
                             }
                     );
-        if (strToken.empty()) { // if not constant
-            tokens.push_back(to_nonterminal_token(*exprPos));
+        if (strToken.empty()) { // if not terminal constant
+            if (std::isspace(*exprPos)) {
+                ++exprPos;
+                continue;
+            }
+            tokens.push_back(to_nonterminal_binary_operator_token(*exprPos));
             ++exprPos;
         } else {
+            if (!tokens.empty() && boost::apply_visitor(IsTerminalConstant(), tokens.back())) {
+                throw std::invalid_argument("invalid constant expression");
+            }
             tokens.push_back(to_terminal_constant(strToken));
         }
     }

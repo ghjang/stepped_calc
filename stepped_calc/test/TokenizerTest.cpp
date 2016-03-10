@@ -3,6 +3,7 @@
 #include "../Tokenizer.h"
 
 #include <regex>
+#include <iostream>
 
 
 TEST_CASE("regex_match, digit sequence", "[stepped_calc]")
@@ -71,5 +72,17 @@ TEST_CASE("tokenize", "[stepped_calc]")
     REQUIRE(cr3);
     REQUIRE(cr4);
     REQUIRE(cr5);
+}
+
+TEST_CASE("invalid constant sequence", "[stepped_calc]")
+{
+    bool exceptionThrown = false;
+    try {
+        token_list_t tokens = tokenize("1 2");
+    } catch (std::invalid_argument const& e) {
+        REQUIRE(0 == strcmp(e.what(), "invalid constant expression"));
+        exceptionThrown = true;
+    }
+    REQUIRE(exceptionThrown);
 }
 
