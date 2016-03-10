@@ -1,6 +1,7 @@
 #include "Tokenizer.h"
 
 #include <regex>
+#include <stack>
 
 
 namespace
@@ -88,6 +89,33 @@ namespace
             default:
                 return false;
         }
+    }
+
+    bool
+    is_left_parenthesis_char(char c)
+    {
+        switch (c) {
+            case '(':
+            case '{':
+            case '[':
+            case '<':
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    bool
+    is_matching_parenthesis(char const leftParen, char const rightParen)
+    {
+        if ((leftParen == '(' && rightParen == ')')
+                || (leftParen == '{' && rightParen == '}')
+                || (leftParen == '[' && rightParen == ']')
+                || (leftParen == '<' && rightParen == '>')) {
+            return true;
+        }
+        return false;
     }
 
     Parenthesis
@@ -205,6 +233,8 @@ tokenize(std::string const& expr)
 {
     token_list_t tokens;
 
+    std::stack<char> parenthesisStack;
+
     std::string::const_iterator exprPos = expr.begin();
     std::string::const_iterator exprEnd = expr.end();
     std::string strToken;
@@ -223,6 +253,16 @@ tokenize(std::string const& expr)
                 ++exprPos;
                 continue;
             }
+            if (is_parenthesis_char(*exprPos)) {
+                if (is_left_parenthesis_char(*exprPos)) {
+                    parenthesisStack.push(*exprPos);
+                } else {
+                    if (!is_matching_parenthesis(parenthesisStack.top(), *exprPos)) {
+                        throw std::invalid_argument("no matching parenthesis");
+                    }
+                    parenthesisStack.pop();
+                }
+            }
             if (tokens.empty()) { // if first token,
                 tokens.push_back(to_nonterminal_token(*exprPos));
             } else {
@@ -235,6 +275,10 @@ tokenize(std::string const& expr)
             }
             tokens.push_back(to_terminal_constant(strToken));
         }
+    }
+
+    if (!parenthesisStack.empty()) {
+        throw std::invalid_argument("no matching parenthesis");
     }
 
     return tokens;
