@@ -86,3 +86,60 @@ TEST_CASE("invalid constant sequence", "[stepped_calc]")
     REQUIRE(exceptionThrown);
 }
 
+TEST_CASE("unary operator", "[stepped_calc]")
+{
+    auto const plus = token_t{ UnaryOperator::Plus };
+    auto const minus = token_t{ UnaryOperator::Minus };
+    auto const one = token_t{ constant_t{ 1 } };
+    auto const lhsRoundParen = token_t{ Parenthesis::RoundLeft };
+    auto const rhsRoundParen = token_t{ Parenthesis::RoundRight };
+
+    {
+        token_list_t tokens = tokenize("+1");
+        REQUIRE(tokens.size() == 2);
+        REQUIRE((tokens[0] == plus));
+        REQUIRE((tokens[1] == one));
+    }
+
+    {
+        token_list_t tokens = tokenize("-1");
+        REQUIRE(tokens.size() == 2);
+        REQUIRE((tokens[0] == minus));
+        REQUIRE((tokens[1] == one));
+    }
+
+    {
+        token_list_t tokens = tokenize("++1");
+        REQUIRE(tokens.size() == 3);
+        REQUIRE((tokens[0] == plus));
+        REQUIRE((tokens[1] == plus));
+        REQUIRE((tokens[2] == one));
+    }
+
+    {
+        token_list_t tokens = tokenize("--1");
+        REQUIRE(tokens.size() == 3);
+        REQUIRE((tokens[0] == minus));
+        REQUIRE((tokens[1] == minus));
+        REQUIRE((tokens[2] == one));
+    }
+
+    {
+        token_list_t tokens = tokenize("+-1");
+        REQUIRE(tokens.size() == 3);
+        REQUIRE((tokens[0] == plus));
+        REQUIRE((tokens[1] == minus));
+        REQUIRE((tokens[2] == one));
+    }
+
+    {
+        token_list_t tokens = tokenize("-(-1)");
+        REQUIRE(tokens.size() == 5);
+        REQUIRE((tokens[0] == minus));
+        REQUIRE((tokens[1] == lhsRoundParen));
+        REQUIRE((tokens[2] == minus));
+        REQUIRE((tokens[3] == one));
+        REQUIRE((tokens[4] == rhsRoundParen));
+    }
+}
+

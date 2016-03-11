@@ -214,6 +214,9 @@ namespace
         if (BinaryOperator const * pOp = boost::get<BinaryOperator>(&prevToken)) {
             return to_nonterminal_unary_operator_token(c);
         }
+        if (UnaryOperator const * pOp = boost::get<UnaryOperator>(&prevToken)) {
+            return to_nonterminal_unary_operator_token(c);
+        }
         return to_nonterminal_binary_operator_token(c);
     }
 
