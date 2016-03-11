@@ -143,3 +143,67 @@ TEST_CASE("unary operator", "[stepped_calc]")
     }
 }
 
+TEST_CASE("parenthesis", "[stepped_calc]")
+{
+    auto const plus = token_t{ UnaryOperator::Plus };
+    auto const minus = token_t{ UnaryOperator::Minus };
+    auto const addition = token_t{ BinaryOperator::Addition };
+    auto const one = token_t{ constant_t{ 1 } };
+    auto const two = token_t{ constant_t{ 2 } };
+    auto const lhsRoundParen = token_t{ Parenthesis::RoundLeft };
+    auto const rhsRoundParen = token_t{ Parenthesis::RoundRight };
+
+    {
+        bool exceptionThrown = false;
+        try {
+            tokenize("(");
+        } catch (std::invalid_argument const& e) {
+            REQUIRE(0 == strcmp(e.what(), "no matching parenthesis"));
+            exceptionThrown = true;
+        }
+        REQUIRE(exceptionThrown);
+    }
+
+    {
+        bool exceptionThrown = false;
+        try {
+            tokenize(")");
+        } catch (std::invalid_argument const& e) {
+            REQUIRE(0 == strcmp(e.what(), "no matching parenthesis"));
+            exceptionThrown = true;
+        }
+        REQUIRE(exceptionThrown);
+    }
+
+    {
+        bool exceptionThrown = false;
+        try {
+            tokenize("(1+2)*8)");
+        } catch (std::invalid_argument const& e) {
+            REQUIRE(0 == strcmp(e.what(), "no matching parenthesis"));
+            exceptionThrown = true;
+        }
+        REQUIRE(exceptionThrown);
+    }
+
+    {
+        token_list_t tokens = tokenize("()");
+        REQUIRE(tokens.size() == 2);
+        REQUIRE((tokens[0] == lhsRoundParen));
+        REQUIRE((tokens[1] == rhsRoundParen));
+    }
+
+    {
+        token_list_t tokens = tokenize("(-(1+2))");
+        REQUIRE(tokens.size() == 8);
+        REQUIRE((tokens[0] == lhsRoundParen));
+        REQUIRE((tokens[1] == minus));
+        REQUIRE((tokens[2] == lhsRoundParen));
+        REQUIRE((tokens[3] == one));
+        REQUIRE((tokens[4] == addition));
+        REQUIRE((tokens[5] == two));
+        REQUIRE((tokens[6] == rhsRoundParen));
+        REQUIRE((tokens[7] == rhsRoundParen));
+    }
+}
+
