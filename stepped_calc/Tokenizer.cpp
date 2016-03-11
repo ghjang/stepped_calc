@@ -257,7 +257,8 @@ tokenize(std::string const& expr)
                 if (is_left_parenthesis_char(*exprPos)) {
                     parenthesisStack.push(*exprPos);
                 } else {
-                    if (!is_matching_parenthesis(parenthesisStack.top(), *exprPos)) {
+                    if (parenthesisStack.empty()
+                            || !is_matching_parenthesis(parenthesisStack.top(), *exprPos)) {
                         throw std::invalid_argument("no matching parenthesis");
                     }
                     parenthesisStack.pop();
